@@ -1,16 +1,55 @@
+import { useState } from "react";
 import { Text, View, StyleSheet, Image, SafeAreaView } from "react-native";
-import { FabButton, NoTasksCard } from "../components";
+import {
+  FabButton,
+  NewTaskModal,
+  NoTasksCard,
+  Timer,
+  TasksList,
+} from "../components";
 import { Theme } from "../themes";
 
-const logo = require("../../assets/logo.png");
+const logoImage = require("../../assets/logo.png");
 
 export function HomeScreen() {
+  const [isNewTaskModalVisible, setIsNewTaskModalVisible] = useState(false);
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Image source={logo} style={styles.logo} resizeMode={"contain"} />
-        <NoTasksCard />
-        <FabButton />
+        <Image source={logoImage} style={styles.logo} resizeMode={"contain"} />
+        {false ? (
+          <NoTasksCard />
+        ) : (
+          <>
+            <View style={styles.timerContainer}>
+              <Timer />
+            </View>
+            <TasksList
+              data={[
+                {
+                  isSelected: true,
+                  label: "Criar um projeto Frontend",
+                  status: "IN_PROGRESS",
+                },
+                {
+                  isSelected: false,
+                  label: "Criar um projeto Frontend",
+                  status: "READY",
+                },
+                {
+                  isSelected: false,
+                  label: "Criar um projeto Frontend",
+                  status: "READY",
+                },
+              ]}
+            />
+          </>
+        )}
+        <FabButton onPress={() => setIsNewTaskModalVisible(true)} />
+        <NewTaskModal
+          isVisible={isNewTaskModalVisible}
+          onClose={() => setIsNewTaskModalVisible(false)}
+        />
       </View>
     </SafeAreaView>
   );
@@ -22,14 +61,16 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.colors.primary,
   },
   container: {
-    paddingVertical: 40,
-    paddingHorizontal: 20,
     flex: 1,
+    marginTop: 40,
+  },
+  timerContainer: {
+    paddingHorizontal: 20,
   },
   logo: {
     width: 227,
     height: 46,
     alignSelf: "center",
-    marginBottom: 20,
+    marginVertical: 40,
   },
 });
